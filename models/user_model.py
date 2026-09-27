@@ -1,24 +1,26 @@
 from datetime import datetime
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, CheckConstraint, func
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-Base = declarative_base()
-
+class Base(DeclarativeBase):
+    pass
 
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)  # SERIAL создаётся автоматически для Integer + primary_key
-    username = Column(String(64), nullable=False, unique=True)
-    email = Column(String(128), nullable=False, unique=True)
-    password_hash = Column(String(256), nullable=False)
-    role = Column(String(16), nullable=False)
-    created_at = Column(DateTime, nullable=False, server_default=func.now())
+    id: Mapped[int] = mapped_column(primary_key=True)  # SERIAL создаётся автоматически для Integer + primary_key
+    username: Mapped[str] = mapped_column(String(64), unique=True)
+    email: Mapped[str] = mapped_column(String(128), unique=True)
+    password_hash: Mapped[str] = mapped_column(String(256))
+    role: Mapped[str] = mapped_column(String(16))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     __table_args__ = (
         CheckConstraint("role IN ('listener', 'artist')", name="ck_users_role"),
     )
 
+    def __repr__(self) -> str:
+        return f"User(id={self.id!r}, username={self.username!r})"
 
 engine = create_engine("postgresql://postgres:pass@localhost:5432/music")
 Base.metadata.create_all(engine)
