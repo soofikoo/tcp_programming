@@ -1,6 +1,7 @@
 from datetime import datetime
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, CheckConstraint, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationships, relationship
+
 
 class Base(DeclarativeBase):
     pass
@@ -19,8 +20,11 @@ class User(Base):
         CheckConstraint("role IN ('listener', 'artist')", name="ck_users_role"),
     )
 
+    #likes: Mapped[list["Likes"]] = relationship(back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
+
+
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, username={self.username!r})"
 
-engine = create_engine("postgresql://postgres:pass@localhost:5432/music")
+engine = create_engine("postgresql://postgres:pass@localhost:5432/music", echo = True)
 Base.metadata.create_all(engine)
