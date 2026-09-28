@@ -1,10 +1,9 @@
 from datetime import datetime
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, CheckConstraint, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationships, relationship
+from sqlalchemy import create_engine, String, CheckConstraint, func
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from models.base_model import Base
 
-class Base(DeclarativeBase):
-    pass
 
 class User(Base):
     __tablename__ = "users"
@@ -20,6 +19,7 @@ class User(Base):
         CheckConstraint("role IN ('listener', 'artist')", name="ck_users_role"),
     )
 
+    # TODO надо back_populates для связи
     #likes: Mapped[list["Likes"]] = relationship(back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
 
 

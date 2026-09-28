@@ -2,9 +2,10 @@ from datetime import datetime
 from sqlalchemy import String, DateTime, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-class Base(DeclarativeBase):
-    pass
+from models.base_model import Base
 
+
+# TODO наверно надо добавить связи к трекам (двустороннею) и артисту (тут хз какая связь)
 class Album(Base):
     __tablename__ = "Album"
 

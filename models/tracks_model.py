@@ -2,9 +2,10 @@ from datetime import datetime
 from sqlalchemy import String, DateTime, ForeignKey, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
+from models.likes_model import Likes
+from models.genres_model import Genres
+from models.base_model import Base
 
-class Base(DeclarativeBase):
-    pass
 
 class Track(Base):
     __tablename__ = 'tracks'
@@ -19,4 +20,4 @@ class Track(Base):
     artist_id: Mapped[int] = mapped_column(ForeignKey('Artists.id'), ondelete = 'CASCADE')
 
     likes: Mapped[list["Likes"]] = relationship(back_populates="track", cascade="all, delete-orphan", passive_deletes=True)
-    genres: Mapped[list["Genre"]] = relationship(secondary="track_genres", back_populates="tracks")
+    genres: Mapped[list["Genres"]] = relationship(secondary="track_genres")

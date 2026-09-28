@@ -2,9 +2,9 @@ from datetime import datetime
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, CheckConstraint, func, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-class Base(DeclarativeBase):
-    pass
+from models.base_model import Base
 
+#
 class TrackGenre(Base):
     __tablename__ = "track_genres"
 
