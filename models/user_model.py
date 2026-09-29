@@ -26,5 +26,5 @@ class User(Base):
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, username={self.username!r})"
 
-engine = create_engine("postgresql://postgres:pass@localhost:5432/music", echo = True)
-Base.metadata.create_all(engine)
+# engine = create_engine("postgresql://postgres:pass@localhost:5432/music", echo = True)
+# Base.metadata.create_all(engine)

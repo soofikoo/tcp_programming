@@ -2,8 +2,8 @@ from datetime import datetime
 from sqlalchemy import DateTime, ForeignKey, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
-from user_model import User, engine
-from tracks_model import Track
+from models.user_model import User
+from models.tracks_model import Track
 
 from models.base_model import Base
 

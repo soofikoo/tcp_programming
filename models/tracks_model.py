@@ -16,7 +16,6 @@ class Track(Base):
     duration: Mapped[int] = mapped_column()
     file_path: Mapped[str] = mapped_column(String(256))
     upload_date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    play_count: Mapped[int] = mapped_column(default=0)
     artist_id: Mapped[int] = mapped_column(ForeignKey('Artists.id'), ondelete = 'CASCADE')
 
     likes: Mapped[list["Likes"]] = relationship(back_populates="track", cascade="all, delete-orphan", passive_deletes=True)

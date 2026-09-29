@@ -12,7 +12,7 @@ with Session() as session:
 '''
 
 # TODO в секреты
-DATABASE_URL = "postgresql://postgres:pass@localhost:5432/music"
+DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/music"
 
 engine = create_engine(DATABASE_URL, echo=True)
 Session = sessionmaker(bind=engine)
