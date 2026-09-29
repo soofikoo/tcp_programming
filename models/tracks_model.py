@@ -7,6 +7,8 @@ from models.genres_model import Genres
 from models.base_model import Base
 
 
+# TODO с лайками связь 99% убрать, жанры можна оставить
+# убрал play_count - кринжа полная
 class Track(Base):
     __tablename__ = 'tracks'
 

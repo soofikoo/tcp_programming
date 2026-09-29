@@ -1,13 +1,14 @@
 from datetime import datetime
-from sqlalchemy import DateTime, ForeignKey, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
-from models.user_model import User
-from models.tracks_model import Track
+from sqlalchemy import DateTime, ForeignKey, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from models.base_model import Base
+from models.tracks_model import Track
+from models.user_model import User
 
-# TODO по идеи убрать двухстороннею
+
+# TODO по идеи убрать двухстороннею или вообще убрать как в listens
 class Likes(Base):
     __tablename__ = 'likes'
 

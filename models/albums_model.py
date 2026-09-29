@@ -5,7 +5,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from models.base_model import Base
 
 
-# TODO наверно надо добавить связи к трекам (двустороннею) и артисту (тут хз какая связь)
+# TODO наверно надо добавить связи к трекам (двустороннею) и артисту (тут хз какая связь)(одностроняя наверн)
 class Album(Base):
     __tablename__ = "Album"
 
