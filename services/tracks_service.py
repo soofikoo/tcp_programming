@@ -1,10 +1,11 @@
 from datetime import datetime
+from typing import Sequence
 
-from sqlalchemy import update, select, delete
+from sqlalchemy import update, select, delete, Result, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from models import Track
+from models import Track, Album, User, TrackGenre
 
 
 def create_track(session: Session, title: str, album_id: int, duration: int, file_path: str, upload_date: datetime, artist_id: int) -> Track:
@@ -15,6 +16,7 @@ def create_track(session: Session, title: str, album_id: int, duration: int, fil
     except IntegrityError:
         session.rollback()
         raise ValueError("Track already exists")
+    session.refresh(track)
     return track
 
 def update_track(session: Session, track_id: int, title: str) -> None:
@@ -27,9 +29,23 @@ def update_track(session: Session, track_id: int, title: str) -> None:
 
 def delete_track(session: Session, track_id: int) -> bool:
     result = session.execute(delete(Track).where(Track.id == track_id))
+    session.commit()
     return result.rowcount > 0
 
 def get_track(session: Session, track_id: int) -> Track | None:
     return session.execute(select(Track).where(Track.id == track_id)).scalar_one_or_none()
 
-# todo (s) посмотреть, нужно ли что-то еще
+def get_track_player(session: Session, track_id: int) -> Track | None:
+    return (session.execute(select(Track.id, Track.title, Track.duration, Track.file_path, User.username.label("artist_name"))
+                            .join(User, User.id == Track.artist_id)
+                            .where(Track.id == track_id))
+            .one_or_none())
+
+def get_track_list_by_genre(session: Session, genres_id: list[int]) -> Sequence[Row[tuple[int, str, int, str, str]]]:
+    return (session.execute(select(Track.id, Track.title, Track.duration, Track.file_path, User.username.label("artist_name"))
+                            .join(User, User.id == Track.artist_id)
+                            .join(TrackGenre, TrackGenre.track_id == Track.id)
+                            .where(TrackGenre.genre_id.in_(genres_id))
+                            .distinct()
+                            )
+            ).all()

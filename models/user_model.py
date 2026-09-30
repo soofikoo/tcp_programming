@@ -1,13 +1,17 @@
 from datetime import datetime
-from sqlalchemy import create_engine, String, CheckConstraint, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 
-from models.artist_profiles_model import Artist
+from sqlalchemy import String, CheckConstraint, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from models.base_model import Base
 
+if TYPE_CHECKING:
+    from models.artist_profile_model import Artist
 
-class Users(Base):
-    __tablename__ = "users"
+
+class User(Base):
+    __tablename__ = "user"
 
     id: Mapped[int] = mapped_column(primary_key=True)  # SERIAL создаётся автоматически для Integer + primary_key
     username: Mapped[str] = mapped_column(String(64), unique=True)
@@ -20,14 +24,7 @@ class Users(Base):
         CheckConstraint("role IN ('listener', 'artist')", name="ck_users_role"),
     )
 
-    # TODO надо back_populates для связи
-    #likes: Mapped[list["Likes"]] = relationship(back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
-
+    artist: Mapped["Artist"] = relationship(back_populates="user")
 
     def __repr__(self) -> str:
         return f"Users(id={self.id!r}, username={self.username!r})"
-
-    artist: Mapped[Artist] = relationship(back_populates="users")
-# engine = create_engine("postgresql://postgres:pass@localhost:5432/music", echo = True)
-# Base.metadata.create_all(engine)
-# todo (s) создать связи, лайки, подписки

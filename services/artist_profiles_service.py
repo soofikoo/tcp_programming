@@ -2,7 +2,7 @@ from sqlalchemy import update, select, delete
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from models.artist_profiles_model import Artist
+from models.artist_profile_model import Artist
 
 
 def create_artist(session: Session, artist_id: int, bio: str) -> Artist:
@@ -26,5 +26,6 @@ def delete_artist(session: Session, artist_id: int) -> bool:
     result = session.execute(delete(Artist).where(Artist.artist_id == artist_id))
     return result.rowcount > 0
 
-
-# todo (s) посмотреть с Кириллом нужен ли здесь еще гет, нужен, надо подсосать имя артиста из юзера
+#todo (s)
+def get_artist_page(session: Session, artist_id: int) -> list[Artist]:
+    pass

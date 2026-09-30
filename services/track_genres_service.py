@@ -17,7 +17,6 @@ def create_track_genre(session: Session, track_id: int, genre_id) -> TrackGenre:
         raise ValueError("Track genre already exists")
     return track
 
-# todo (s) посмотреть что ещё нужно сделать (апдейт же не нужен?)
 def delete_track_genre(session: Session, track_id: int, genre_id: int) -> bool:
     result = session.execute(delete(TrackGenre).where(
         TrackGenre.track_id == track_id,

@@ -4,11 +4,11 @@ from sqlalchemy import delete, select, func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from models import Subscriptions
+from models import Subscription
 
 
-def create_subscription(session: Session, subscription_id: int, artist_id: int) -> Subscriptions:
-    subscription = Subscriptions(
+def create_subscription(session: Session, subscription_id: int, artist_id: int) -> Subscription:
+    subscription = Subscription(
         subscription_id = subscription_id,
         artist_id = artist_id,
     )
@@ -23,17 +23,15 @@ def create_subscription(session: Session, subscription_id: int, artist_id: int) 
 
 def delete_subscription(session: Session, subscription_id: int, artist_id: int) -> bool:
     result = session.execute(
-        delete(Subscriptions)
-        .where(Subscriptions.subscription_id == subscription_id, Subscriptions.artist_id == artist_id)
+        delete(Subscription)
+        .where(Subscription.subscription_id == subscription_id, Subscription.artist_id == artist_id)
     )
     session.commit()
     return result.rowcount > 0
 
-def get_all_subscriptions_by_user(session: Session, user_id: int) -> Sequence[Subscriptions]:
-    return session.execute(select(Subscriptions).where(Subscriptions.subscription_id == user_id)).scalars().all()
+def count_Subscription_by_artist(session: Session, artist_id: int) -> int:
+    return session.execute(select(func.count(Subscription.artist_id)).where(Subscription.artist_id == artist_id)).scalar_one()
 
-def get_all_subscriptions_by_artist(session: Session, artist_id: int) -> Sequence[Subscriptions]:
-    return session.execute(select(Subscriptions).where(Subscriptions.artist_id == artist_id)).scalars().all()
-
-def count_subscriptions_by_artist(session: Session, artist_id: int) -> int:
-    return session.execute(select(func.count(Subscriptions.artist_id)).where(Subscriptions.artist_id == artist_id)).scalar_one()
+#todo (s)
+def get_Subscription_by_user(session: Session, user_id: int) -> Sequence[Subscription]:
+    pass

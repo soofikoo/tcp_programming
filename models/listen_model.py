@@ -5,11 +5,11 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from models.base_model import Base
 
-# todo (s) создать связи к названию трека
-class Listens(Base):
-    __tablename__ = "listens"
+
+class Listen(Base):
+    __tablename__ = "listen"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete = 'CASCADE'))
-    track_id: Mapped[int] = mapped_column(ForeignKey("tracks.id", ondelete = 'CASCADE'))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete = 'CASCADE'))
+    track_id: Mapped[int] = mapped_column(ForeignKey("track.id", ondelete = 'CASCADE'))
     listened_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
