@@ -11,7 +11,7 @@ with Session() as session:
     genre = create_genre(session, "rock")
 '''
 
-# TODO в секреты
+# TODO (К) в секреты
 DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/music"
 
 engine = create_engine(DATABASE_URL, echo=True)
