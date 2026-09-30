@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from models import Track, Album, User, TrackGenre
 
 
-def create_track(session: Session, title: str, album_id: int, duration: int, file_path: str, upload_date: datetime, artist_id: int) -> Track:
+def create_track(session: Session, title: str, album_id: int | None, duration: int, file_path: str, upload_date: datetime, artist_id: int) -> Track:
     track = Track(title=title, album_id=album_id, duration=duration, file_path=file_path, upload_date=upload_date, artist_id=artist_id)
     session.add(track)
     try:

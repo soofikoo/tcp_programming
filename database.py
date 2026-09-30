@@ -14,5 +14,5 @@ with Session() as session:
 # TODO (К) в секреты
 DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/music"
 
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(DATABASE_URL, echo=False)
 Session = sessionmaker(bind=engine)
