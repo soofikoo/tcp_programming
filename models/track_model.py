@@ -15,7 +15,7 @@ class Track(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(128))
-    album_id: Mapped[int | None] = mapped_column(ForeignKey('album.id'))
+    album_id: Mapped[int] = mapped_column(ForeignKey('album.id'))
     duration: Mapped[int] = mapped_column()
     file_path: Mapped[str] = mapped_column(String(256))
     upload_date: Mapped[datetime] = mapped_column(DateTime)

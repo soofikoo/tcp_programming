@@ -26,7 +26,7 @@ def delete_like(session: Session, user_id: int, track_id: int):
     session.commit()
     return result.rowcount > 0
 
-def get_Like_user(session: Session, user_id: int) -> Sequence[Like]:
+def get_likes_user(session: Session, user_id: int) -> Sequence[Like]:
     return session.execute(select(Like).where(Like.user_id == user_id)).scalars().all()
 
 def is_like_track(session: Session, track_id: int, user_id: int) -> bool:
@@ -35,10 +35,10 @@ def is_like_track(session: Session, track_id: int, user_id: int) -> bool:
     ).scalar_one_or_none() is not None
 
 def get_liked_track(session: Session, user_id: int):
-    return session.execute(select(Track.id, Track.title, Track.duration, User.username.label("artist_name"), Like.Like_at)
+    return session.execute(select(Track.id, Track.title, Track.duration, User.username.label("artist_name"), Like.likes_at)
                             .join(Track, Track.id == Like.track_id)
                             .join(User, User.id == Like.user_id)
                             .where(Like.user_id == user_id)
-                            .order_by(Like.Like_at.desc())
+                            .order_by(Like.likes_at.desc())
     ).all()
 
