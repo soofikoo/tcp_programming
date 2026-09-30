@@ -24,6 +24,7 @@ def update_genre(session: Session, genre_id: int, name: str) -> Genres | None:
         session.rollback()
         raise ValueError("Genre already exists")
     return get_genre(session=session, genre_id=genre_id)
+# todo (k) зачем гет, если это апдейт
 
 def get_genre(session: Session, genre_id: int) -> Genres | None:
     return session.execute(select(Genres).where(Genres.id == genre_id)).scalar_one_or_none()
@@ -32,3 +33,5 @@ def delete_genre(session: Session, genre_id: int) -> bool:
     result = session.execute(delete(Genres).where(Genres.id == genre_id))
     session.commit()
     return result.rowcount > 0
+
+# todo (s) посмотреть что нужно еще
