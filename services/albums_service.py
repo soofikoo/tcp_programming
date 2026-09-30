@@ -1,10 +1,12 @@
 from datetime import datetime
 
-from sqlalchemy import update, select, delete
+from sqlalchemy import update, select, delete, Result
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+from sqlalchemy.sql._typing import _TP
 
-from models import Album
+from models import Album, Track
+from models.artist_profile_model import Artist
 
 
 def create_album(session: Session, title: str, artist_id: int, release_date: datetime, cover_url: str) -> Album:
@@ -36,6 +38,8 @@ def delete_album(session: Session, album_id: int) -> bool:
 def get_album(session: Session, album_id: int) -> Album | None:
     return session.execute(select(Album).where(Album.id == album_id)).scalar_one_or_none()
 
-#todo (s)
-def get_album_by_track(session: Session, track_id: int) -> Album | None:
-    pass
+def get_album_by_track(session: Session, track_id: int) -> Result[_TP]:
+    return session.execute(select(Album.title, Album.tracks.title, Album.tracks.genres, Album.tracks.duration, Artist.user.username)
+                           .join(Artist, Album.artist_id == Artist.artist_id)
+                           .where(Album.tracks.in_(track_id))
+    )

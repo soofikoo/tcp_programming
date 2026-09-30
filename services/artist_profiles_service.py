@@ -1,7 +1,10 @@
-from sqlalchemy import update, select, delete
+from typing import Any, Sequence
+
+from sqlalchemy import update, select, delete, Result, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from models import Album
 from models.artist_profile_model import Artist
 
 
@@ -26,6 +29,8 @@ def delete_artist(session: Session, artist_id: int) -> bool:
     result = session.execute(delete(Artist).where(Artist.artist_id == artist_id))
     return result.rowcount > 0
 
-#todo (s)
-def get_artist_page(session: Session, artist_id: int) -> list[Artist]:
-    pass
+def get_artist_page(session: Session, artist_id: int) -> Sequence[Row[Any]]:
+    return session.execute(select(Artist.user.username, Album.title, Album.cover_url)
+                           .join(Album, Album.artist_id == Artist.artist_id)
+                           .where(Artist.artist_id == artist_id)
+    ).all()

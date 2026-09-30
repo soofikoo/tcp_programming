@@ -35,7 +35,7 @@ def delete_track(session: Session, track_id: int) -> bool:
 def get_track(session: Session, track_id: int) -> Track | None:
     return session.execute(select(Track).where(Track.id == track_id)).scalar_one_or_none()
 
-def get_track_player(session: Session, track_id: int) -> Track | None:
+def get_track_player(session: Session, track_id: int) -> Row[tuple[int, str, int, str, str]] | None:
     return (session.execute(select(Track.id, Track.title, Track.duration, Track.file_path, User.username.label("artist_name"))
                             .join(User, User.id == Track.artist_id)
                             .where(Track.id == track_id))

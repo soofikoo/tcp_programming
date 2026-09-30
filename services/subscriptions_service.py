@@ -1,10 +1,11 @@
 from typing import Sequence
 
-from sqlalchemy import delete, select, func
+from sqlalchemy import delete, select, func, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+from sqlalchemy.sql._typing import _TP
 
-from models import Subscription
+from models import Subscription, User
 
 
 def create_subscription(session: Session, subscription_id: int, artist_id: int) -> Subscription:
@@ -29,9 +30,13 @@ def delete_subscription(session: Session, subscription_id: int, artist_id: int) 
     session.commit()
     return result.rowcount > 0
 
-def count_Subscription_by_artist(session: Session, artist_id: int) -> int:
+def count_subscription_by_artist(session: Session, artist_id: int) -> int:
     return session.execute(select(func.count(Subscription.artist_id)).where(Subscription.artist_id == artist_id)).scalar_one()
 
-#todo (s)
-def get_Subscription_by_user(session: Session, user_id: int) -> Sequence[Subscription]:
-    pass
+def get_subscription_by_user(session: Session, subscription_id: int) -> Sequence[Row[_TP]]:
+    return session.execute(select(User.username.label("artist_name"))
+                           .join(User, User.id == Subscription.artist_id)
+                           .where (Subscription.subscription_id == subscription_id)
+                           .distinct(User.username)
+                           .order_by(User.username)
+    ).all()

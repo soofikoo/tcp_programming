@@ -20,7 +20,7 @@ class Track(Base):
     file_path: Mapped[str] = mapped_column(String(256))
     upload_date: Mapped[datetime] = mapped_column(DateTime)
     artist_id: Mapped[int] = mapped_column(ForeignKey('artist.artist_id', ondelete = 'CASCADE'))
-    #TODO
+    # TODO
     genres: Mapped[list["Genre"]] = relationship(secondary="track_genre")
     album: Mapped["Album | None"] = relationship(back_populates="tracks")
 
