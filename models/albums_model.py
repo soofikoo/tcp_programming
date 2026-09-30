@@ -11,6 +11,6 @@ class Album(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(128))
-    artist_id: Mapped[int] = mapped_column(ForeignKey("User.id", ondelete="CASCADE"))
+    artist_id: Mapped[int] = mapped_column(ForeignKey("Users.id", ondelete="CASCADE"))
     release_date: Mapped[datetime] = mapped_column(DateTime)
     cover_url: Mapped[str] = mapped_column(String(256))

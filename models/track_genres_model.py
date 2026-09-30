@@ -10,3 +10,4 @@ class TrackGenre(Base):
     track_id: Mapped[int] = mapped_column(ForeignKey("Tracks.id", ondelete="CASCADE"), primary_key=True)
     genre_id: Mapped[int] = mapped_column(ForeignKey("Genres.id", ondelete="CASCADE"), primary_key=True)
 
+# todo (s) создать связи

@@ -7,7 +7,7 @@ from models.genres_model import Genres
 from models.base_model import Base
 
 
-# TODO с лайками связь 99% убрать, жанры можна оставить
+# todo (s) создать связи к имени артиста, нужен ли дефолт в дате?
 # убрал play_count - кринжа полная
 class Track(Base):
     __tablename__ = 'tracks'
@@ -20,5 +20,5 @@ class Track(Base):
     upload_date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     artist_id: Mapped[int] = mapped_column(ForeignKey('Artists.id'), ondelete = 'CASCADE')
 
-    likes: Mapped[list["Likes"]] = relationship(back_populates="track", cascade="all, delete-orphan", passive_deletes=True)
     genres: Mapped[list["Genres"]] = relationship(secondary="track_genres")
+

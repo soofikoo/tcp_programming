@@ -10,4 +10,4 @@ class Subscriptions(Base):
 
     subscription_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete = 'CASCADE'), primary_key=True)
     artist_id: Mapped[int] = mapped_column(ForeignKey("artists.id", ondelete = 'CASCADE'), primary_key=True)
-    subscribed_at = Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    subscribed_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())

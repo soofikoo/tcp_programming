@@ -5,7 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from models.base_model import Base
 
-
+# todo (s) создать связи к названию трека
 class Listens(Base):
     __tablename__ = "listens"
 

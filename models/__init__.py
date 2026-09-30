@@ -1,5 +1,5 @@
 from models.base_model import Base
-from models.user_model import User
+from models.user_model import Users
 from models.tracks_model import Track
 from models.albums_model import Album
 from models.genres_model import Genres
