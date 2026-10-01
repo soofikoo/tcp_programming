@@ -1,6 +1,6 @@
 from typing import Any, Sequence
 
-from sqlalchemy import update, select, delete, Result, Row
+from sqlalchemy import update, select, delete, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 

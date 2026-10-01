@@ -1,6 +1,7 @@
-from sqlalchemy import update, select, delete
+from sqlalchemy import select, delete
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+
 from models import User
 
 

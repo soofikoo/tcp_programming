@@ -1,4 +1,4 @@
-from typing import Any, Sequence
+from typing import Sequence
 
 from sqlalchemy import select, func
 from sqlalchemy.exc import IntegrityError

@@ -1,11 +1,11 @@
 from datetime import datetime
 from typing import Sequence
 
-from sqlalchemy import update, select, delete, Result, Row
+from sqlalchemy import update, select, delete, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from models import Track, Album, User, TrackGenre
+from models import Track, User, TrackGenre
 
 
 def create_track(session: Session, title: str, album_id: int | None, duration: int, file_path: str, upload_date: datetime, artist_id: int) -> Track:

@@ -1,12 +1,10 @@
 from datetime import datetime
 
-from sqlalchemy import update, select, delete, Result, Row
+from sqlalchemy import update, select, delete, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from sqlalchemy.sql._typing import _TP
 
 from models import Album, Track
-from models.artist_profile_model import Artist
 
 
 def create_album(session: Session, title: str, artist_id: int, release_date: datetime, cover_url: str) -> Album:

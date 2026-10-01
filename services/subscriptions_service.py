@@ -3,7 +3,6 @@ from typing import Sequence, Any
 from sqlalchemy import delete, select, func, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from sqlalchemy.sql._typing import _TP
 
 from models import Subscription, User
 
