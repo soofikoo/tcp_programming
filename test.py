@@ -2,14 +2,15 @@ from sqlalchemy import select
 
 from database import Session
 from models import User, Genre, Album, Track
+from services.albums_service import get_album_by_track
 
 from services.user_service import get_users
-from services.artist_profiles_service import get_artist, update_artist
+from services.artist_profiles_service import get_artist, update_artist, get_artist_page
 from services.tracks_service import get_track_player, get_track_list_by_genre
 from services.track_genres_service import get_track_genres
 from services.likes_service import create_like, delete_like, get_likes_user, is_like_track, get_liked_track
 from services.listens_service import create_listen, get_list_user_Listen, count_track_Listen
-from services.subscriptions_service import create_subscription, count_Subscription_by_artist
+from services.subscriptions_service import create_subscription, count_subscription_by_artist, get_subscription_by_user
 
 
 def run_demo() -> None:
@@ -51,7 +52,7 @@ def run_demo() -> None:
             print(f"{listener.username} подписался на {artist_user.username}")
         except ValueError:
             print("подписка уже существует")
-        print("подписчиков у артиста:", count_Subscription_by_artist(session, artist_user.id))
+        print("подписчиков у артиста:", count_subscription_by_artist(session, artist_user.id))
 
         print("Жанры трека")
         print(get_track_genres(session, album_track.id))
@@ -64,13 +65,15 @@ def run_demo() -> None:
         update_artist(session, artist_user.id, bio="Обновлённое био — демонстрация update_artist")
         print("bio после обновления:", get_artist(session, artist_user.id).bio)
 
-        # (TODO в сервисном слое)
-        print("реализовать: по track_id вернуть его альбом (join Track.album_id -> Album)")
+        print("Альбом по треку")
+        print(get_album_by_track(session, album_track.id))
 
-        print("реализовать: профиль артиста + список его альбомов (см. get_album_page в чате)")
+        print("Профиль артиста")
 
-        print("реализовать: join Subscription+User+Artist для экрана 'мои подписки'")
+        print(get_artist_page(session, artist_user.id))
 
+        print("Подписки по юзеру")
+        print(get_subscription_by_user(session, 1))
 
 if __name__ == "__main__":
     run_demo()

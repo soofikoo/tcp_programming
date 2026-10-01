@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, Any
 
 from sqlalchemy import delete, select, func, Row
 from sqlalchemy.exc import IntegrityError
@@ -33,10 +33,10 @@ def delete_subscription(session: Session, subscription_id: int, artist_id: int) 
 def count_subscription_by_artist(session: Session, artist_id: int) -> int:
     return session.execute(select(func.count(Subscription.artist_id)).where(Subscription.artist_id == artist_id)).scalar_one()
 
-def get_subscription_by_user(session: Session, subscription_id: int) -> Sequence[Row[_TP]]:
-    return session.execute(select(User.username.label("artist_name"))
-                           .join(User, User.id == Subscription.artist_id)
-                           .where (Subscription.subscription_id == subscription_id)
-                           .distinct(User.username)
-                           .order_by(User.username)
+def get_subscription_by_user(session: Session, subscription_id: int) -> Sequence[Row[Any]]:
+    return session.execute(
+        select(User.username.label("artist_name"), Subscription.subscribed_at)
+        .join(Subscription, User.id == Subscription.artist_id)
+        .where(Subscription.subscription_id == subscription_id)
+        .order_by(User.username)
     ).all()

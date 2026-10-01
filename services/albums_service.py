@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import update, select, delete, Result
+from sqlalchemy import update, select, delete, Result, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy.sql._typing import _TP
@@ -38,8 +38,9 @@ def delete_album(session: Session, album_id: int) -> bool:
 def get_album(session: Session, album_id: int) -> Album | None:
     return session.execute(select(Album).where(Album.id == album_id)).scalar_one_or_none()
 
-def get_album_by_track(session: Session, track_id: int) -> Result[_TP]:
-    return session.execute(select(Album.title, Album.tracks.title, Album.tracks.genres, Album.tracks.duration, Artist.user.username)
-                           .join(Artist, Album.artist_id == Artist.artist_id)
-                           .where(Album.tracks.in_(track_id))
-    )
+def get_album_by_track(session: Session, track_id: int) -> Row | None:
+    return session.execute(
+        select(Album.id, Album.title, Album.cover_url, Album.release_date)
+        .join(Track, Track.album_id == Album.id)
+        .where(Track.id == track_id)
+    ).one_or_none()
