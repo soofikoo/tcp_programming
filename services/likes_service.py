@@ -35,10 +35,10 @@ def is_like_track(session: Session, track_id: int, user_id: int) -> bool:
     ).scalar_one_or_none() is not None
 
 def get_liked_track(session: Session, user_id: int):
-    return session.execute(select(Track.id, Track.title, Track.duration, User.username.label("artist_name"), Like.likes_at)
+    return session.execute(select(Track.id, Track.title, Track.duration, User.username.label("artist_name"), Like.created_at)
                             .join(Track, Track.id == Like.track_id)
                             .join(User, User.id == Like.user_id)
                             .where(Like.user_id == user_id)
-                            .order_by(Like.likes_at.desc())
+                            .order_by(Like.created_at.desc())
     ).all()
 

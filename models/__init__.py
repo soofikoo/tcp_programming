@@ -7,3 +7,4 @@ from models.like_model import Like
 from models.listen_model import Listen
 from models.subscription_model import Subscription
 from models.track_genre_model import TrackGenre
+from models.artist_profile_model import Artist

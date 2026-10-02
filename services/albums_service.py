@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from sqlalchemy import update, select, delete, Row
 from sqlalchemy.exc import IntegrityError
@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from models import Album, Track
 
 
-def create_album(session: Session, title: str, artist_id: int, release_date: datetime, cover_url: str) -> Album:
+def create_album(session: Session, title: str, artist_id: int, release_date: date, cover_url: str) -> Album:
     album = Album(title=title, artist_id=artist_id, release_date=release_date, cover_url=cover_url)
     session.add(album)
     try:

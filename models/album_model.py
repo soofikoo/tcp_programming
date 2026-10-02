@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from sqlalchemy import String, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -14,7 +14,7 @@ class Album(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(128))
     artist_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
-    release_date: Mapped[datetime] = mapped_column(DateTime)
+    release_date: Mapped[date] = mapped_column()
     cover_url: Mapped[str] = mapped_column(String(256))
 
     artist: Mapped["User"] = relationship()

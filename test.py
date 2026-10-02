@@ -31,7 +31,7 @@ def run_demo() -> None:
 
         print("История прослушиваний")
         listen = create_listen(session, user_id=listener.id, track_id=album_track.id)
-        print(f"listen создан: user={listen.user_id}, track={listen.track_id}, время={listen.listened_at}")
+        print(f"listen создан: user={listen.user_id}, track={listen.track_id}, время={listen.created_at}")
         print("история прослушиваний юзера:", get_list_user_Listen(session, listener.id))
         print("сколько раз трек прослушан всего:", count_track_Listen(session, album_track.id))
 
