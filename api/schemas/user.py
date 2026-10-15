@@ -5,9 +5,10 @@ from pydantic import BaseModel, Field, ConfigDict
 
 class UserRegister(BaseModel):
     username: str = Field(min_length=3, max_length=64)
-    email: str
+    email: str = Field(max_length=128)
     password: str = Field(min_length=6)
     role: Literal["listener", "artist"] = "listener"
+
 
 class UserOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -16,6 +17,12 @@ class UserOut(BaseModel):
     email: str
     role: str
 
+
 class UserUpdate(BaseModel):
-    username: str | None = None
-    email: str | None = None
+    username: str | None = Field(default=None, min_length=3, max_length=64)
+    email: str | None = Field(default=None, max_length=128)
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
