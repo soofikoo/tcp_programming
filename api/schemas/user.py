@@ -15,3 +15,7 @@ class UserOut(BaseModel):
     username: str
     email: str
     role: str
+
+class UserUpdate(BaseModel):
+    username: str | None = None
+    email: str | None = None
