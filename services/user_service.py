@@ -18,6 +18,7 @@ def create_user(session: Session, username: str, email: str, password: str, role
     except IntegrityError:
         session.rollback()
         raise ValueError("User already exists")
+    session.refresh(user)
     return user
 
 #def update_user(session: Session, ) -> Users:
@@ -30,3 +31,8 @@ def delete_user(session: Session, user_id: int) -> bool:
 
 def get_users(session: Session, user_id: int) -> User | None:
     return session.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
+
+def get_user_by_username(session: Session, username: str) -> User | None:
+    return session.execute(
+        select(User).where(User.username == username)
+    ).scalar_one_or_none()

@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 from sqlalchemy import select
 
@@ -16,8 +16,8 @@ from services.track_genres_service import create_track_genre
 def fill() -> None:
     with Session() as session:
         print("Юзер")
-        listener = create_user(session, "sofiko", "sofiko@example.com", "listener")
-        artist_user = create_user(session, "hehehe", "hehehe@example.com", "artist")
+        listener = create_user(session, "sofiko", "sofiko@example.com", "1234", "listener")
+        artist_user = create_user(session, "hehehe", "hehehe@example.com", "1111", "artist")
 
         print("Артист")
         artist_profile = get_artist(session, artist_user.id)
@@ -44,12 +44,12 @@ def fill() -> None:
         track1 = create_track(
             session, title="Очень-очень", album_id=album.id,
             duration=245, file_path="tracks/ochen_ochen.mp3",
-            upload_date=datetime.utcnow(), artist_id=artist_user.id,
+            upload_date=datetime.now(timezone.utc), artist_id=artist_user.id,
         )
         track2 = create_track(
             session, title="Ничего страшного", album_id=album.id,
             duration=198, file_path="tracks/nichego_strashnogo.mp3",
-            upload_date=datetime.utcnow(), artist_id=artist_user.id,
+            upload_date=datetime.now(timezone.utc), artist_id=artist_user.id,
         )
         print(f"созданы треки: {track1.title}, {track2.title}")
 
