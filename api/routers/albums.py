@@ -49,7 +49,7 @@ def delete_own_album(album_id: int, db: DbSession = Depends(get_db), user: User 
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Not your album")
     delete_album(db, album_id)
 
-@router.put("/page/{album_id}", response_model=AlbumPage)
+@router.get("/page/{album_id}", response_model=AlbumPage)
 def get_album_page(album_id: int, db: DbSession = Depends(get_db)):
     album = get_album(db, album_id)
     if album is None:

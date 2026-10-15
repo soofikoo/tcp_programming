@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from api.deps import get_db
+from api.deps import get_db, require_role
 from api.schemas.genre import GenreOut, GenreCreate, GenreUpdate
+from models import User
 from services.genres_service import get_genre, create_genre, update_genre, delete_genre
 from sqlalchemy.orm import Session as DbSession
 router = APIRouter(prefix="/genres", tags=["genres"])
@@ -20,13 +21,19 @@ def create(body: GenreCreate, db: DbSession = Depends(get_db)):
     except ValueError as e:
         raise HTTPException(status.HTTP_409_CONFLICT, str(e))
 
-@router.patch("/{genre_id}", status_code=status.HTTP_202_ACCEPTED)
-def update(body: GenreUpdate, genre_id: int, db: DbSession = Depends(get_db)):
+@router.patch("/{genre_id}", response_model=GenreOut)
+def patch_genre(genre_id: int, body: GenreUpdate,
+                db: DbSession = Depends(get_db),
+                user: User = Depends(require_role("artist"))):
+    if get_genre(db, genre_id) is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Genre not found")
     try:
         update_genre(db, genre_id, body.name)
     except ValueError as e:
         raise HTTPException(status.HTTP_409_CONFLICT, str(e))
+    return get_genre(db, genre_id)
 
 @router.delete("/{genre_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete(genre_id: int, db: DbSession = Depends(get_db)):
-    delete_genre(db, genre_id)
+    if not delete_genre(db, genre_id):
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Genre not found")
