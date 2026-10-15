@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -8,6 +8,7 @@ class TrackCreate(BaseModel):
     album_id: int | None = None
     duration: int = Field(gt=0, description="Длительность в секундах")
     file_path: str = Field(max_length=256)
+    release_date: date
 
 
 class TrackUpdate(BaseModel):
@@ -22,7 +23,7 @@ class TrackOut(BaseModel):
     album_id: int | None
     duration: int
     file_path: str
-    upload_date: datetime
+    release_date: date
     artist_id: int
 
 

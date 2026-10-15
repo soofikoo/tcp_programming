@@ -34,7 +34,15 @@ def add_track(body: TrackCreate, db: DbSession = Depends(get_db),
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Album not found")
         if album.artist_id != user.id:
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Not your album")
-    return create_track(db, body.title, body.album_id, body.duration, body.file_path, user.id)
+    return create_track(
+        db,
+        title=body.title,
+        album_id=body.album_id,
+        duration=body.duration,
+        file_path=body.file_path,
+        release_date=body.release_date,
+        artist_id=user.id,
+    )
 
 
 @router.patch("/{track_id}", response_model=TrackOut)

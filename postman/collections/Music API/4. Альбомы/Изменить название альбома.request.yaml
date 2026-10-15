@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{base_url}}/albums/{{album_id}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Demo album (remaster)"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{artist_token}}"
+order: 3000

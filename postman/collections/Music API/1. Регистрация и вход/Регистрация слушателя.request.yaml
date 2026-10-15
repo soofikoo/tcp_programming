@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "listener_demo",
+      "email": "listener_demo@test.ru",
+      "password": "secret123",
+      "role": "listener"
+    }
+auth:
+  type: noauth
+order: 2000

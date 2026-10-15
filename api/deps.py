@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session as DbSession
 
 from database import Session
 from models import User
-from services.user_service import get_users
+from services.user_service import get_user
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -21,7 +21,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: DbSession = Depend
         user_id = int(decode_token(token)["sub"])
     except jwt.PyJWTError:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid token")
-    user = get_users(db, user_id)
+    user = get_user(db, user_id)
     if user is None:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "User not found")
     return user

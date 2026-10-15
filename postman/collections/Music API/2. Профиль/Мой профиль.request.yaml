@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{base_url}}/me"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{listener_token}}"
+order: 1000

@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Sequence
 
 from sqlalchemy import update, select, delete, Row
@@ -7,15 +8,16 @@ from sqlalchemy.orm import Session
 from models import Track, User, TrackGenre
 
 
-def create_track(session: Session, title: str, album_id: int | None, duration: int,
-                 file_path: str, artist_id: int) -> Track:
-    track = Track(title=title, album_id=album_id, duration=duration, file_path=file_path, artist_id=artist_id)
+def create_track(session: Session, title: str, album_id: int, duration: int,
+                 file_path: str, release_date: date, artist_id: int) -> Track:
+    track = Track(title=title, album_id=album_id, duration=duration,
+                  file_path=file_path, release_date=release_date, artist_id=artist_id)
     session.add(track)
     try:
         session.commit()
     except IntegrityError:
         session.rollback()
-        raise ValueError("Album not found")
+        raise
     session.refresh(track)
     return track
 

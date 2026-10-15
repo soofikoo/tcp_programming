@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{base_url}}/genres"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "hack"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{listener_token}}"
+order: 3000

@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{base_url}}/artists/{{artist_id}}"
+method: GET
+auth:
+  type: noauth
+order: 6000
