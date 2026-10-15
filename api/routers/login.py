@@ -31,3 +31,4 @@ def patch_me(body: UserUpdate,
         return update_user(db, user.id, **data)
     except ValueError as e:
         raise HTTPException(status.HTTP_409_CONFLICT, str(e))
+
