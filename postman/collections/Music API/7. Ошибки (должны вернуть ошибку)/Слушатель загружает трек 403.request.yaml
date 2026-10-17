@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{base_url}}/tracks"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "hack",
+      "duration": 100,
+      "file_path": "/media/x.mp3"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{listener_token}}"
+order: 4000

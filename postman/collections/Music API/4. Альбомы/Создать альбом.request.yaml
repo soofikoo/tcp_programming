@@ -1,0 +1,19 @@
+$kind: http-request
+description: ""
+url: "{{base_url}}/albums"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Demo album",
+      "release_date": "2026-10-01",
+      "cover_url": "https://example.com/cover.jpg"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{artist_token}}"
+order: 1000

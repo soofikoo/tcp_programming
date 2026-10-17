@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{base_url}}/login"
+method: POST
+body:
+  type: urlencoded
+  content:
+    username: artist_demo
+    password: wrong
+auth:
+  type: noauth
+order: 2000

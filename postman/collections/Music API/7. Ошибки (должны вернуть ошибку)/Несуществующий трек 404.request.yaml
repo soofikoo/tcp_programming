@@ -1,0 +1,6 @@
+$kind: http-request
+url: "{{base_url}}/tracks/999999"
+method: GET
+auth:
+  type: noauth
+order: 7000

@@ -18,7 +18,7 @@ class Track(Base):
     album_id: Mapped[int] = mapped_column(ForeignKey('album.id'))
     duration: Mapped[int] = mapped_column()
     file_path: Mapped[str] = mapped_column(String(256))
-    upload_date: Mapped[datetime] = mapped_column(DateTime)
+    release_date: Mapped[datetime] = mapped_column(DateTime)
     artist_id: Mapped[int] = mapped_column(ForeignKey('artist.artist_id', ondelete = 'CASCADE'))
 
     genres: Mapped[list["Genre"]] = relationship(secondary="track_genre")

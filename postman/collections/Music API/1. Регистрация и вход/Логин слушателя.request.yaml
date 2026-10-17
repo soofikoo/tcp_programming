@@ -1,0 +1,12 @@
+$kind: http-request
+description: ""
+url: "{{base_url}}/login"
+method: POST
+body:
+  type: urlencoded
+  content:
+    username: listener_demo
+    password: secret123
+auth:
+  type: noauth
+order: 4000

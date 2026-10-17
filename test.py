@@ -15,13 +15,13 @@ from services.subscriptions_service import create_subscription, count_subscripti
 
 def run_demo() -> None:
     with Session() as session:
-        listener = session.execute(select(User).where(User.username == "pixsele")).scalar_one()
-        artist_user = session.execute(select(User).where(User.username == "oxxxymiron")).scalar_one()
-        album = session.execute(select(Album).where(Album.title == "Горгород")).scalar_one()
+        listener = session.execute(select(User).where(User.username == "sofiko")).scalar_one()
+        artist_user = session.execute(select(User).where(User.username == "hehehe")).scalar_one()
+        album = session.execute(select(Album).where(Album.title == "Паника")).scalar_one()
         album_track = session.execute(
             select(Track).where(Track.album_id == album.id)
         ).scalars().first()
-        genre = session.execute(select(Genre).where(Genre.name == "rap")).scalar_one()
+        genre = session.execute(select(Genre).where(Genre.name == "indie_pop")).scalar_one()
 
         print("Получить профиль пользователя")
         print(get_users(session, listener.id))

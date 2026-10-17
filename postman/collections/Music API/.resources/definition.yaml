@@ -1,0 +1,10 @@
+$kind: collection
+description: ""
+variables:
+  base_url: http://localhost:8000
+  artist_token: ""
+  listener_token: ""
+  artist_id: ""
+  genre_id: ""
+  album_id: ""
+  track_id: ""

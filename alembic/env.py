@@ -9,6 +9,10 @@ from alembic import context
 # access to the values within the .ini file in use.
 config = context.config
 
+# URL базы берём из .env через database.py, а не из alembic.ini (там пароль попал бы в git)
+from database import DATABASE_URL
+config.set_main_option("sqlalchemy.url", DATABASE_URL.replace("%", "%%"))
+
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
