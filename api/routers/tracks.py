@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session as DbSession
 
 from api.deps import get_db, require_role, get_current_user
@@ -9,8 +9,7 @@ from services.genres_service import get_genre
 from services.likes_service import create_like, delete_like
 from services.listens_service import create_listen
 from services.track_genres_service import create_track_genre, delete_track_genre
-from services.tracks_service import (create_track, get_track, get_track_list_by_genre,
-                                     get_track_player, update_track, delete_track)
+from services.tracks_service import (create_track, get_track, get_track_player, update_track, delete_track)
 
 router = APIRouter(prefix="/tracks", tags=["tracks"])
 

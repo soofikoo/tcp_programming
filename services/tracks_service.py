@@ -5,7 +5,7 @@ from sqlalchemy import update, select, delete, Row
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from models import Track, User, TrackGenre
+from models import Track, User, TrackGenre, Artist
 
 
 def create_track(session: Session, title: str, album_id: int, duration: int,
@@ -68,3 +68,13 @@ def get_track_list_by_genre(session: Session, genre_ids: list[int]) -> Sequence[
         .distinct()
         .order_by(Track.id)
     ).all()
+
+def get_tracks_by_ids(db, ids: list[int]) -> dict[int, tuple[str, str]]:
+    if not ids:
+        return {}
+    rows = db.execute(
+        select(Track.id, Track.title, Artist.user.username)
+        .join(Artist, Artist.artist_id == Track.artist_id)
+        .where(Track.id.in_(ids))
+    ).all()
+    return {track_id: (title, artist_name) for track_id, title, artist_name in rows}
