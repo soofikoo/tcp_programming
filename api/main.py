@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from api.routers import genres, auth, tracks, albums, artists, users
+from api.routers import genres, auth, tracks, albums, artists, users, recomendations
 
 app = FastAPI(title="Music API")
 
@@ -14,3 +14,4 @@ app.include_router(genres.router)
 app.include_router(albums.router)
 app.include_router(tracks.router)
 app.include_router(artists.router)
+app.include_router(recomendations.router)

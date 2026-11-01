@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package recommendation;
+
+service Recommendation {
+    rpc GetRecommendations (RecommendationRequest) returns (RecommendationResponse);
+}
+
+message RecommendationRequest {
+    int32 user_id = 1;
+    int32 limit = 2;
+}
+
+message RecommendedTrack {
+    int32 track_id = 1;
+    double score = 2;
+    string reason = 3;
+}
+
+message RecommendationResponse {
+    repeated RecommendedTrack tracks = 1;
+    bool cold_start = 2;
+}
