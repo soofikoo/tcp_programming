@@ -73,8 +73,9 @@ def get_tracks_by_ids(db, ids: list[int]) -> dict[int, tuple[str, str]]:
     if not ids:
         return {}
     rows = db.execute(
-        select(Track.id, Track.title, Artist.user.username)
+        select(Track.id, Track.title, User.username)
         .join(Artist, Artist.artist_id == Track.artist_id)
+        .join(User, User.id == Artist.artist_id)
         .where(Track.id.in_(ids))
     ).all()
     return {track_id: (title, artist_name) for track_id, title, artist_name in rows}

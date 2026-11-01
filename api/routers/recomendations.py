@@ -10,6 +10,13 @@ from protos import recommendation_pb2 as pb2
 
 router = APIRouter(prefix="/recommendations", tags=["recommendations"])
 
+GRPC_TO_HTTP = {
+    grpc.StatusCode.UNAVAILABLE: (status.HTTP_503_SERVICE_UNAVAILABLE, "Recommendation service is unavailable"),
+    grpc.StatusCode.DEADLINE_EXCEEDED: (status.HTTP_504_GATEWAY_TIMEOUT, "Recommendation service timed out"),
+    grpc.StatusCode.INVALID_ARGUMENT: (status.HTTP_400_BAD_REQUEST, "Invalid recommendation request"),
+    grpc.StatusCode.NOT_FOUND: (status.HTTP_404_NOT_FOUND, "User not found"),
+}
+
 @router.get("", response_model=list[RecommendationOut])
 def recommendations(limit: int = 10,
                     user: User = Depends(get_current_user),
@@ -20,7 +27,11 @@ def recommendations(limit: int = 10,
             pb2.RecommendationRequest(user_id=user.id, limit=limit), timeout=2
         )
     except grpc.RpcError as e:
-        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "GRPC Service Unavailable")
+        http_status, detail = GRPC_TO_HTTP.get(
+            e.code(),
+            (status.HTTP_503_SERVICE_UNAVAILABLE, "Recommendation service error"),
+        )
+        raise HTTPException(status_code=http_status, detail=detail)
 
     tracks = get_tracks_by_ids(db, [t.track_id for t in reply.tracks])
 

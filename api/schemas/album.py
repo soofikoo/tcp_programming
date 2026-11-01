@@ -12,7 +12,7 @@ class AlbumCreate(BaseModel):
 class AlbumUpdate(BaseModel):
     title: str | None = Field(default=None, min_length=1, max_length=128)
     release_date: date | None = None
-    cover_url: str | None = Field(default=None, max_length=256)
+    cover_url: str = Field(default=None, max_length=256)
 
 
 class AlbumOut(BaseModel):

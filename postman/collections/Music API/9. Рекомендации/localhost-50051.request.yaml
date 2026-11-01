@@ -1,0 +1,20 @@
+$kind: grpc-request
+name: localhost:50051
+description: ""
+url: localhost:50051
+methodPath: recommendation.Recommendation.GetRecommendations
+methodDescriptor: CocDChRyZWNvbW1lbmRhdGlvbi5wcm90bxIOcmVjb21tZW5kYXRpb24iPwoVUmVjb21tZW5kYXRpb25SZXF1ZXN0EhMKB3VzZXJfaWQYASABKAVCAhABEhEKBWxpbWl0GAIgASgFQgIQASJPChBSZWNvbW1lbmRlZFRyYWNrEhQKCHRyYWNrX2lkGAEgASgFQgIQARIRCgVzY29yZRgCIAEoAUICEAESEgoGcmVhc29uGAMgASgJQgIQASJWChZSZWNvbW1lbmRhdGlvblJlc3BvbnNlEiQKBnRyYWNrcxgBIAMoCzIQUmVjb21tZW5kZWRUcmFja0ICEAESFgoKY29sZF9zdGFydBgCIAEoCEICEAEydQoOUmVjb21tZW5kYXRpb24SYwoSR2V0UmVjb21tZW5kYXRpb25zEiUucmVjb21tZW5kYXRpb24uUmVjb21tZW5kYXRpb25SZXF1ZXN0GiYucmVjb21tZW5kYXRpb24uUmVjb21tZW5kYXRpb25SZXNwb25zZQ==
+message:
+  content: "{\r
+
+    \    \"user_id\": 1,\r
+
+    \    \"limit\": 5\r
+
+    }"
+settings:
+  secureConnection: false
+schema:
+  source: file
+  location: /C:/Progs/tcp_programming/protos/recommendation.proto
+order: 2000

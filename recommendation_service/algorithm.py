@@ -10,6 +10,7 @@ W_SUBSCRIPTION = 2.0
 W_POPULARITY = 1.0
 
 def popular_tracks(db, limit: int, exclude: set[int] = frozenset()) -> list[tuple[int, int]]:
+    """Самые прослушиваемые треки: [(track_id, число прослушиваний)]"""
     req = (
         select(Track.id, func.count(Listen.id).label("plays"))
         .outerjoin(Listen, Listen.track_id == Track.id)
@@ -22,6 +23,7 @@ def popular_tracks(db, limit: int, exclude: set[int] = frozenset()) -> list[tupl
     return db.execute(req).all()
 
 def genre_scores(db, user_id: int) -> Counter:
+    """Интерес пользователя к жанрам: {genre_id: вес}"""
     liked = db.scalars(select(TrackGenre.genre_id)
                        .join(Like, Like.track_id == TrackGenre.track_id)
                        .where(Like.user_id == user_id)).all()
@@ -36,11 +38,13 @@ def genre_scores(db, user_id: int) -> Counter:
     return scores
 
 def seen_tracks(db, user_id: int) -> set[int]:
+    """id треков, с которыми пользователь уже взаимодействовал, их не рекомендуем"""
     liked = db.scalars(select(Like.track_id).where(Like.user_id == user_id)).all()
     listened = db.scalars(select(Listen.track_id).where(Listen.user_id == user_id)).all()
     return set(liked) | set(listened)
 
 def candidate_tracks(db, top_genres: list[int], seen: set[int]) -> dict[int, list[int]]:
+    """Кандидаты в рекомендации: {track_id: [его жанры из top_genres]}"""
     rows = db.execute(
         select(TrackGenre.track_id, TrackGenre.genre_id)
         .where(TrackGenre.genre_id.in_(top_genres))
@@ -54,6 +58,7 @@ def candidate_tracks(db, top_genres: list[int], seen: set[int]) -> dict[int, lis
     return result
 
 def subscribed_tracks(db, user_id: int, track_ids: list[int]) -> set[int]:
+    """Какие из track_ids принадлежат исполнителям, на которых подписан пользователь"""
     rows = db.scalars(
         select(Track.id)
         .join(Subscription, Subscription.artist_id == Track.artist_id)
@@ -62,6 +67,7 @@ def subscribed_tracks(db, user_id: int, track_ids: list[int]) -> set[int]:
     return set(rows)
 
 def plays_count(db, track_ids: list[int]) -> dict[int, int]:
+    """Число прослушиваний каждого трека: {track_id: count}"""
     rows = db.execute(
         select(Listen.track_id, func.count(Listen.id))
         .where (Listen.track_id.in_(track_ids))
@@ -90,21 +96,27 @@ def recommend(db, user_id: int, limit: int) -> tuple[list[tuple[int, float, str]
         subs = subscribed_tracks(db, user_id, ids)
         plays = plays_count(db, ids)
         max_plays = max(plays.values(), default=0) or 1
-
         for tid, genres in candidates.items():
+            # базовая оценка, суммарный интерес пользователя к жанрам трека
             score = 0
             for g in genres:
                 score += scores[g]
             reason = "genre"
+            # бонус за подписку
             if tid in subs:
                 score += W_SUBSCRIPTION
                 reason += "+subscription"
+
+            # бонус за популярность
+            # нормировка популярности самый прослушиваемый кандидат получает 1.0
             score += W_POPULARITY * plays.get(tid, 0) / max_plays
             result.append((tid, float(score), reason))
 
         result.sort(key=lambda r: r[1], reverse=True)
         result = result[:limit]
 
+    # Персональных кандидатов меньше, чем нужно (например, все треки любимых жанров
+    # уже прослушаны), добиваем популярными, исключая уже показанные и прослушанные/лайкнутые
     if len(result) < limit:
         exclude = seen | {tid for tid, _, _ in result}
         for tid, plays in popular_tracks(db, limit - len(result), exclude):
