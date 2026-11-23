@@ -41,3 +41,8 @@ def get_subscription_by_user(session: Session, subscriber_id: int) -> Sequence[R
         .where(Subscription.subscriber_id == subscriber_id)
         .order_by(User.username)
     ).all()
+
+def get_subscriber_ids(db, artist_id: int) -> list[int]:
+    return list(db.scalars(
+        select(Subscription.subscriber_id).where(Subscription.artist_id == artist_id)
+    ))

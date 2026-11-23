@@ -1,13 +1,21 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.orm import Session as DbSession
 
 from api.deps import get_db, require_role, get_current_user
+from api.events import publish_event
+from api.schemas import track
+from api.schemas.notification import TrackCreatedEvent
 from api.schemas.track import TrackCreate, TrackUpdate, TrackOut, TrackListItem
+from messaging import TRACK_CREATED
 from models import User
 from services.albums_service import get_album
+from services.artist_profiles_service import get_artist
 from services.genres_service import get_genre
 from services.likes_service import create_like, delete_like
 from services.listens_service import create_listen
+from services.subscriptions_service import get_subscriber_ids
 from services.track_genres_service import create_track_genre, delete_track_genre
 from services.tracks_service import (create_track, get_track, get_track_player, update_track, delete_track)
 
@@ -25,7 +33,9 @@ def get_track_by_id(track_id: int, db: DbSession = Depends(get_db)):
 
 
 @router.post("", response_model=TrackOut, status_code=status.HTTP_201_CREATED)
-def add_track(body: TrackCreate, db: DbSession = Depends(get_db),
+def add_track(body: TrackCreate,
+              background: BackgroundTasks,
+              db: DbSession = Depends(get_db),
               user: User = Depends(require_role("artist"))):
     if body.album_id is not None:
         album = get_album(db, body.album_id)
@@ -33,7 +43,8 @@ def add_track(body: TrackCreate, db: DbSession = Depends(get_db),
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Album not found")
         if album.artist_id != user.id:
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Not your album")
-    return create_track(
+
+    track = create_track(
         db,
         title=body.title,
         album_id=body.album_id,
@@ -42,6 +53,18 @@ def add_track(body: TrackCreate, db: DbSession = Depends(get_db),
         release_date=body.release_date,
         artist_id=user.id,
     )
+
+    event = TrackCreatedEvent(
+        track_id=track.id,
+        title=track.title,
+        artist_id=user.id,
+        artist_name=user.username,
+        subscriber_ids=get_subscriber_ids(db, user.id),
+        created_at=datetime.now(timezone.utc),
+    )
+
+    background.add_task(publish_event, TRACK_CREATED, event.model_dump_json())
+    return track
 
 
 @router.patch("/{track_id}", response_model=TrackOut)
