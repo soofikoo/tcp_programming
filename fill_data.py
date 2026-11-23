@@ -44,12 +44,12 @@ def fill() -> None:
         track1 = create_track(
             session, title="Очень-очень", album_id=album.id,
             duration=245, file_path="tracks/ochen_ochen.mp3",
-            upload_date=datetime.now(timezone.utc), artist_id=artist_user.id,
+            release_date=datetime.now(timezone.utc), artist_id=artist_user.id,
         )
         track2 = create_track(
             session, title="Ничего страшного", album_id=album.id,
             duration=198, file_path="tracks/nichego_strashnogo.mp3",
-            upload_date=datetime.now(timezone.utc), artist_id=artist_user.id,
+            release_date=datetime.now(timezone.utc), artist_id=artist_user.id,
         )
         print(f"созданы треки: {track1.title}, {track2.title}")
 
